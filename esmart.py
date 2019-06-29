@@ -39,11 +39,11 @@ class SolarData(object):
 class Esmart:
     def __init__(self) -> None:
         self.state = STATE_START
-        self.data: List[int] = []
-        self.callback: Optional[Callable] = None
+        self.data = [] # type: List[int]
+        self.callback = None # type: Optional[Callable]
         self.port = ""
         self.timeout = 0
-        self.ser: Optional[serial.Serial] = None
+        self.ser = None # type: Optional[serial.Serial]
 
     def __del__(self) -> None:
         self.close()
