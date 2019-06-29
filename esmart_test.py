@@ -4,7 +4,6 @@
 import esmart
 import time
 import influxdb
-import datetime
 
 
 class InfluxLogger(object):
@@ -43,7 +42,7 @@ class InfluxLogger(object):
 
 		points = []
 
-		timestamp = int(datetime.datetime.now().strftime('%s'))
+		timestamp = time.ctime()
 		points.append({
 			'time': timestamp,
 			'measurement': 'van_scc',
