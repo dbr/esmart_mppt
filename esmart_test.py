@@ -4,6 +4,7 @@
 import esmart
 import time
 import influxdb
+import datetime
 
 
 class InfluxLogger(object):
@@ -25,21 +26,31 @@ class InfluxLogger(object):
 		print("Charging %s, %.1f A, %.1f W" % (esmart.DEVICE_MODE[d.chg_mode], d.chg_cur, d.bat_volt * d.chg_power))
 		print("Discharging %.1f V, %.1f A, %.1f W" % (d.load_volt, d.load_cur, d.load_power))
 
-		point = {
-					'bat_volt': d.bat_volt,
-					'bat_temp': d.bat_temp,
-					'chg_mode': esmart.DEVICE_MODE[d.chg_mode],
-					'chg_power': d.chg_power,
-        			'pv_volt': d.pv_volt,
-					'chg_cur': d.chg_cur,
-					'load_volt': d.load_volt,
-					'load_cur': d.load_cur,
-					'load_power': d.load_power,
-					'int_temp': d.int_temp,
-					'soc': d.soc,
-				}
-		print(point)
-		self.connection.write_points([point])
+		datadict = {
+			'bat_volt': d.bat_volt,
+			'bat_temp': d.bat_temp,
+			'chg_mode': esmart.DEVICE_MODE[d.chg_mode],
+			'chg_power': d.chg_power,
+			'pv_volt': d.pv_volt,
+			'chg_cur': d.chg_cur,
+			'load_volt': d.load_volt,
+			'load_cur': d.load_cur,
+			'load_power': d.load_power,
+			'int_temp': d.int_temp,
+			'soc': d.soc,
+			}
+
+
+		points = []
+
+		timestamp = int(datetime.datetime.now().strftime('%s'))
+		points.append({
+			'time': timestamp,
+			'measurement': 'van_scc',
+			'fields': datadict,
+		})
+		print(points)
+		self.connection.write_points(points)
 
 
 
